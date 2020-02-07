@@ -14,6 +14,8 @@ class AIuniusPlayerController : public APlayerController
 public:
 	AIuniusPlayerController();
 
+	virtual void SetPawn(APawn* InPawn) override;
+
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -23,8 +25,16 @@ protected:
 	virtual void SetupInputComponent() override;
 	// End PlayerController interface
 
-	/** Resets HMD orientation in VR. */
-	void OnResetVR();
+	UPROPERTY(VisibleAnywhere)
+	FVector MovementVectorThisFrame = FVector::ZeroVector;
+
+	AIuniusCharacter* MyPawn = nullptr;
+ 
+	void MoveFromMovementVector();
+
+	void MoveForward(float _value);
+
+	void MoveRight(float _value);
 
 	/** Navigate player to the current mouse cursor location. */
 	void MoveToMouseCursor();

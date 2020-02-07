@@ -87,4 +87,61 @@ void AIuniusCharacter::Tick(float DeltaSeconds)
 			CursorToWorld->SetWorldRotation(CursorR);
 		}
 	}
+
+	if (MovementThisFrame.SizeSquared() > 0.0f)
+	{
+		MoveFromMovementVector();
+	}
+
+	MovementThisFrame = FVector(0.0f, 0.0f, 0.0f);
 }
+
+/*
+void ATDTopDownCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	auto contrl = GetController();
+	auto world = GetWorld();
+
+	if (contrl != nullptr && world != nullptr)
+	{
+		if (MoveThisFrame > 0)
+		{
+			auto navSys = UNavigationSystemV1::GetNavigationSystem(world);
+			if (MoveThisFrame == 2)
+				MovementVectorThisFrame.Normalize();
+			if (navSys != nullptr)
+			{
+				auto Destination = GetActorLocation() + MovementVectorThisFrame * MoveSpeed * DeltaSeconds;
+				Destination = navSys->ProjectPointToNavigation(world, Destination);
+				UAIBlueprintHelperLibrary::SimpleMoveToLocation(contrl, Destination);
+				//
+				//if (Destination.SizeSquared() > 0.f)
+				//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("Destination => X : %f Y : %f Z : %f"), Destination.X,Destination.Y,Destination.Z));
+				//
+
+			}
+		}
+
+		auto acontrl = Cast<APlayerController>(contrl);
+
+		if (acontrl != nullptr)
+		{
+			FHitResult TraceHitResult;
+			acontrl->GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
+			auto direction = TraceHitResult.ImpactPoint - GetActorLocation();
+			if (direction.SizeSquared() > 0.1f)
+			{
+				direction.Z = 0;
+				auto temp = (direction).ToOrientationRotator();
+				SetActorRotation(temp);
+			}
+		}
+	}
+
+	MovementVectorThisFrame = FVector::ZeroVector;
+	MoveThisFrame = false;
+}
+
+*/

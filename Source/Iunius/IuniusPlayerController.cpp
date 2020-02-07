@@ -22,6 +22,21 @@ void AIuniusPlayerController::PlayerTick(float DeltaTime)
 	{
 		MoveToMouseCursor();
 	}
+	else if (MovementVectorThisFrame.SizeSquared() > 0.0f)
+	{
+		MoveFromMovementVector();
+	}
+
+	MovementVectorThisFrame = FVector::ZeroVector;
+}
+
+
+void AIuniusPlayerController::SetPawn(APawn* InPaw)
+{
+	Super::SetPawn(InPaw);
+
+	MyPawn = Cast<AIuniusCharacter>(InPaw);
+
 }
 
 void AIuniusPlayerController::SetupInputComponent()
@@ -36,19 +51,43 @@ void AIuniusPlayerController::SetupInputComponent()
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AIuniusPlayerController::MoveToTouchLocation);
 	InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AIuniusPlayerController::MoveToTouchLocation);
 
-	InputComponent->BindAction("ResetVR", IE_Pressed, this, &AIuniusPlayerController::OnResetVR);
+	InputComponent->BindAxis("MoveForward", this, &AIuniusPlayerController::MoveForward);
+	InputComponent->BindAxis("MoveRight", this, &AIuniusPlayerController::MoveRight);
 }
 
-void AIuniusPlayerController::OnResetVR()
+void AIuniusPlayerController::MoveForward(float _value)
 {
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
+	MovementVectorThisFrame.X += _value;
+}
+
+void AIuniusPlayerController::MoveRight(float _value)
+{
+	MovementVectorThisFrame.Y += _value;
+}
+
+void AIuniusPlayerController::MoveFromMovementVector()
+{
+	MovementVectorThisFrame.Normalize();
+
+	if (MyPawn)
+	{
+		FHitResult TraceHitResult;
+		GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
+		auto direction = TraceHitResult.ImpactPoint - MyPawn->GetActorLocation();
+		if (direction.SizeSquared() > 0.1f)
+		{
+			direction.Z = 0;
+			auto temp = (direction).ToOrientationRotator();
+			MyPawn->SetActorRotation(temp);
+		}
+	}
 }
 
 void AIuniusPlayerController::MoveToMouseCursor()
 {
 	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled())
 	{
-		if (AIuniusCharacter* MyPawn = Cast<AIuniusCharacter>(GetPawn()))
+		if (MyPawn)
 		{
 			if (MyPawn->GetCursorToWorld())
 			{
@@ -86,7 +125,7 @@ void AIuniusPlayerController::MoveToTouchLocation(const ETouchIndex::Type Finger
 
 void AIuniusPlayerController::SetNewMoveDestination(const FVector DestLocation)
 {
-	APawn* const MyPawn = GetPawn();
+	//APawn* const MyPawn = GetPawn();
 	if (MyPawn)
 	{
 		float const Distance = FVector::Dist(DestLocation, MyPawn->GetActorLocation());
