@@ -6,6 +6,9 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "IuniusCharacter.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
+#include "NavigationSystem.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AIuniusPlayerController::AIuniusPlayerController()
 {
@@ -22,9 +25,9 @@ void AIuniusPlayerController::PlayerTick(float DeltaTime)
 	{
 		MoveToMouseCursor();
 	}
-	else if (MovementVectorThisFrame.SizeSquared() > 0.0f)
+	if (MovementVectorThisFrame.SizeSquared() > 0.0f)
 	{
-		MoveFromMovementVector();
+		MoveFromMovementVector(DeltaTime);
 	}
 
 	MovementVectorThisFrame = FVector::ZeroVector;
@@ -65,10 +68,27 @@ void AIuniusPlayerController::MoveRight(float _value)
 	MovementVectorThisFrame.Y += _value;
 }
 
-void AIuniusPlayerController::MoveFromMovementVector()
+void AIuniusPlayerController::MoveFromMovementVector(float DeltaTime)
 {
 	MovementVectorThisFrame.Normalize();
+	auto world = GetWorld();
 
+	if (MyPawn && world)
+	{
+		auto navSys = UNavigationSystemV1::GetNavigationSystem(world);
+		if (navSys != nullptr)
+		{
+			auto Destination = MyPawn->GetActorLocation() + MovementVectorThisFrame * 10000.0f * DeltaTime;
+			Destination = navSys->ProjectPointToNavigation(world, Destination);
+			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, Destination);
+			
+			
+			//if (GEngine)
+			//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("Destination => X : %f Y : %f Z : %f"), Destination.X,Destination.Y,Destination.Z));
+		}
+	}
+
+	/*
 	if (MyPawn)
 	{
 		FHitResult TraceHitResult;
@@ -81,6 +101,7 @@ void AIuniusPlayerController::MoveFromMovementVector()
 			MyPawn->SetActorRotation(temp);
 		}
 	}
+	*/
 }
 
 void AIuniusPlayerController::MoveToMouseCursor()

@@ -28,9 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	FVector MovementVectorThisFrame = FVector::ZeroVector;
 
-	AIuniusCharacter* MyPawn = nullptr;
+	class AIuniusCharacter* MyPawn = nullptr;
  
-	void MoveFromMovementVector();
+	void MoveFromMovementVector(float DeltaTime);
 
 	void MoveForward(float _value);
 

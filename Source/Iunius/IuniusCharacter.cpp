@@ -11,6 +11,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Materials/Material.h"
 #include "Engine/World.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AIuniusCharacter::AIuniusCharacter()
 {
@@ -28,6 +29,7 @@ AIuniusCharacter::AIuniusCharacter()
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
+	//CharacterMovementComponent = Cast<UCharacterMovementComponent>()
 	// Create a camera boom...
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -87,14 +89,12 @@ void AIuniusCharacter::Tick(float DeltaSeconds)
 			CursorToWorld->SetWorldRotation(CursorR);
 		}
 	}
-
-	if (MovementThisFrame.SizeSquared() > 0.0f)
-	{
-		MoveFromMovementVector();
-	}
-
-	MovementThisFrame = FVector(0.0f, 0.0f, 0.0f);
 }
+
+//float AIuniusCharacter::GetMoveSpeed()
+//{
+//	return GetCharacterMovement()->GetMaxSpeed();
+//}
 
 /*
 void ATDTopDownCharacter::Tick(float DeltaSeconds)
