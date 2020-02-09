@@ -12,8 +12,10 @@
 #include "Materials/Material.h"
 #include "Engine/World.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "IuniusCharacterMovementComponent.h"
 
-AIuniusCharacter::AIuniusCharacter()
+AIuniusCharacter::AIuniusCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UIuniusCharacterMovementComponent>(AIuniusCharacter::CharacterMovementComponentName))
 {
 	// Set size for player capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);

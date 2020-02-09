@@ -12,7 +12,7 @@ class AIuniusCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	AIuniusCharacter();
+	AIuniusCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
