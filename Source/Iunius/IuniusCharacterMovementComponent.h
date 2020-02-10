@@ -26,25 +26,36 @@ class IUNIUS_API UIuniusCharacterMovementComponent : public UCharacterMovementCo
 	GENERATED_BODY()
 	
 protected :
-	//virtual void OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode) override;
 
-	FVector DirectionDash;
+	FVector DirectionDash = FVector::ForwardVector;
 
-	float DashTimer;
+	float DashTimer = 0.0f;
 
-	float DashDuration;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Dash")
+		float DashDuration = 0.25f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Dash")
+		float SpeedDash = 3000.0f;
 
 public :
 	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Custom")
 		uint8 GetCustomMode() const;
 
-	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Climb")
+	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Dash")
 		virtual bool IsDashing() const;
 
-	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Climb")
+	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Dash")
 		virtual void Dash(const FVector & DirectionToDash);
 
-	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Climb")
+	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Dash")
+		virtual void StopDash();
+
+	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Dash")
 		virtual bool CanDash(FHitResult& hitResult) const;
+
+	virtual void PhysCustom(float deltaTime, int32 Iterations) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Dash" )
+	virtual void PhysDash(float deltaTime, int32 Iterations);
 
 };

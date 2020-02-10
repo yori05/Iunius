@@ -18,7 +18,9 @@ public:
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
+	uint8 bMoveToMouseCursor : 1;
+
+	uint8 bWantToDash : 1;
 
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
@@ -35,6 +37,8 @@ protected:
 	void MoveForward(float _value);
 
 	void MoveRight(float _value);
+
+	void Dash();
 
 	/** Navigate player to the current mouse cursor location. */
 	void MoveToMouseCursor();

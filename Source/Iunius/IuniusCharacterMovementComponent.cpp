@@ -2,20 +2,7 @@
 
 
 #include "IuniusCharacterMovementComponent.h"
-
-/*
-void UIuniusCharacterMovementComponent::OnMovementModeChanged(EMovementMode NewMovementMode, uint8 NewCustomMode)
-{
-	if (!HasValidData())
-	{
-		return;
-	}
-
-	Super::OnMovementModeChanged(NewMovementMode, NewCustomMode);
-
-
-}
-*/
+#include "GameFramework/Character.h"
 
 uint8 UIuniusCharacterMovementComponent::GetCustomMode() const
 {
@@ -32,12 +19,55 @@ void UIuniusCharacterMovementComponent::Dash(const FVector & DirectionToDash)
 	if (!IsDashing())
 	{
 		SetMovementMode(MOVE_Custom, (uint8)EMovementModeCustom::CUSTOM_Dash);
-		DirectionDash = DirectionToDash;
+		if (DirectionToDash.SizeSquared() > 0.0001f)
+			DirectionDash = CharacterOwner->GetActorForwardVector();
+		else
+			DirectionDash = DirectionToDash;
+
 		DashTimer = DashDuration;
+		bOrientRotationToMovement = false;
+	}
+}
+
+void UIuniusCharacterMovementComponent::StopDash()
+{
+	if (IsDashing())
+	{
+		SetMovementMode(MOVE_Walking, (uint8)EMovementModeCustom::CUSTOM_None);
+		bOrientRotationToMovement = true;
 	}
 }
 
 bool UIuniusCharacterMovementComponent::CanDash(FHitResult& resultHit) const
 {
-	return false;
+	return !IsDashing();
+}
+
+void UIuniusCharacterMovementComponent::PhysCustom(float deltaTime, int32 Iterations) 
+{
+	Super::PhysCustom(deltaTime, Iterations);
+
+	switch ((EMovementModeCustom) CustomMovementMode)
+	{
+	case EMovementModeCustom::CUSTOM_None:
+		break;
+	case EMovementModeCustom::CUSTOM_Dash:
+		PhysDash(deltaTime, Iterations);
+		break;
+	case EMovementModeCustom::CUSTOM_Max:
+		break;
+	default:
+		break;
+	}
+}
+
+void UIuniusCharacterMovementComponent::PhysDash(float deltaTime, int32 Iterations)
+{
+	if (DashTimer < 0.0f)
+		StopDash();
+
+	DashTimer -= deltaTime;
+	FHitResult hit;
+	const auto Adjusted = DirectionDash * deltaTime * SpeedDash;
+	SafeMoveUpdatedComponent(Adjusted, UpdatedComponent->GetComponentRotation(), true, hit);
 }

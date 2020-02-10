@@ -14,20 +14,29 @@ AIuniusPlayerController::AIuniusPlayerController()
 {
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Crosshairs;
+	bWantToDash = false;
 }
 
 void AIuniusPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	// keep updating the destination every tick while desired
-	if (bMoveToMouseCursor)
+	if (bWantToDash)
 	{
-		MoveToMouseCursor();
+		bWantToDash = false;
+		MyPawn->Dash(MovementVectorThisFrame);
 	}
-	if (MovementVectorThisFrame.SizeSquared() > 0.0f)
+	else
 	{
-		MoveFromMovementVector(DeltaTime);
+		// keep updating the destination every tick while desired
+		if (bMoveToMouseCursor)
+		{
+			MoveToMouseCursor();
+		}
+		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
+		{
+			MoveFromMovementVector(DeltaTime);
+		}
 	}
 
 	MovementVectorThisFrame = FVector::ZeroVector;
@@ -56,6 +65,8 @@ void AIuniusPlayerController::SetupInputComponent()
 
 	InputComponent->BindAxis("MoveForward", this, &AIuniusPlayerController::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AIuniusPlayerController::MoveRight);
+
+	InputComponent->BindAction("Dash", IE_Pressed, this, &AIuniusPlayerController::Dash);
 }
 
 void AIuniusPlayerController::MoveForward(float _value)
@@ -81,27 +92,10 @@ void AIuniusPlayerController::MoveFromMovementVector(float DeltaTime)
 			auto Destination = MyPawn->GetActorLocation() + MovementVectorThisFrame * 10000.0f * DeltaTime;
 			Destination = navSys->ProjectPointToNavigation(world, Destination);
 			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, Destination);
-			
-			
 			//if (GEngine)
 			//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("Destination => X : %f Y : %f Z : %f"), Destination.X,Destination.Y,Destination.Z));
 		}
 	}
-
-	/*
-	if (MyPawn)
-	{
-		FHitResult TraceHitResult;
-		GetHitResultUnderCursor(ECC_Visibility, true, TraceHitResult);
-		auto direction = TraceHitResult.ImpactPoint - MyPawn->GetActorLocation();
-		if (direction.SizeSquared() > 0.1f)
-		{
-			direction.Z = 0;
-			auto temp = (direction).ToOrientationRotator();
-			MyPawn->SetActorRotation(temp);
-		}
-	}
-	*/
 }
 
 void AIuniusPlayerController::MoveToMouseCursor()
@@ -169,4 +163,9 @@ void AIuniusPlayerController::OnSetDestinationReleased()
 {
 	// clear flag to indicate we should stop updating the destination
 	bMoveToMouseCursor = false;
+}
+
+void AIuniusPlayerController::Dash()
+{
+	bWantToDash = true;
 }
