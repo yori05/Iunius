@@ -25,7 +25,7 @@ public:
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
 
 	UFUNCTION(BlueprintCallable)
-	void Dash(const FVector & DirectionToDash);
+	void Dash(const FVector & DirectionToDash = FVector::ZeroVector);
 
 	//UFUNCTION(BlueprintCallable)
 	//float GetMoveSpeed() ;

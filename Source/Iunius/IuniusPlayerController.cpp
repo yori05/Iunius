@@ -24,18 +24,32 @@ void AIuniusPlayerController::PlayerTick(float DeltaTime)
 	if (bWantToDash)
 	{
 		bWantToDash = false;
-		MyPawn->Dash(MovementVectorThisFrame);
+		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
+		{
+			MyPawn->Dash(MovementVectorThisFrame);
+		}
+		else if (bMoveToMouseCursor)
+		{
+			auto adjusted = MyPawn->GetCursorToWorld()->GetComponentLocation() - MyPawn->GetActorLocation();
+			adjusted.Z = 0;
+			adjusted.Normalize();
+			MyPawn->Dash(adjusted);
+		}
+		else
+		{
+			MyPawn->Dash();
+		}
 	}
 	else
 	{
 		// keep updating the destination every tick while desired
-		if (bMoveToMouseCursor)
-		{
-			MoveToMouseCursor();
-		}
 		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
 		{
 			MoveFromMovementVector(DeltaTime);
+		}
+		else if (bMoveToMouseCursor)
+		{
+			MoveToMouseCursor();
 		}
 	}
 

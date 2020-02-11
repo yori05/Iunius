@@ -19,7 +19,7 @@ void UIuniusCharacterMovementComponent::Dash(const FVector & DirectionToDash)
 	if (!IsDashing())
 	{
 		SetMovementMode(MOVE_Custom, (uint8)EMovementModeCustom::CUSTOM_Dash);
-		if (DirectionToDash.SizeSquared() > 0.0001f)
+		if (DirectionToDash.SizeSquared() < 0.0001f)
 			DirectionDash = CharacterOwner->GetActorForwardVector();
 		else
 			DirectionDash = DirectionToDash;
