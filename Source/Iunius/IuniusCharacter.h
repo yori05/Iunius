@@ -24,6 +24,8 @@ public:
 	/** Returns CursorToWorld subobject **/
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
 
+	UFUNCTION(BlueprintCallable)
+	void Dash(const FVector & DirectionToDash = FVector::ZeroVector);
 
 	//UFUNCTION(BlueprintCallable)
 	//float GetMoveSpeed() ;
@@ -42,6 +44,9 @@ private:
 	class UDecalComponent* CursorToWorld;
 
 protected :
+
+	UPROPERTY(EditAnywhere)
+		class UIuniusCharacterMovementComponent * CustomCharacterMC;
 
 	//UPROPERTY(VisibleAnywhere, EditAnywhere)
 	//class UCharacterMovementComponent * CharacterMovementComponent;

@@ -30,6 +30,7 @@ AIuniusCharacter::AIuniusCharacter(const FObjectInitializer& ObjectInitializer)
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+	CustomCharacterMC = Cast<UIuniusCharacterMovementComponent>(GetCharacterMovement());
 
 	//CharacterMovementComponent = Cast<UCharacterMovementComponent>()
 	// Create a camera boom...
@@ -93,10 +94,13 @@ void AIuniusCharacter::Tick(float DeltaSeconds)
 	}
 }
 
-//float AIuniusCharacter::GetMoveSpeed()
-//{
-//	return GetCharacterMovement()->GetMaxSpeed();
-//}
+void AIuniusCharacter::Dash(const FVector & DirectionToDash)
+{
+	if (CustomCharacterMC)
+	{
+		CustomCharacterMC->Dash(DirectionToDash);
+	}
+}
 
 /*
 void ATDTopDownCharacter::Tick(float DeltaSeconds)
