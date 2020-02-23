@@ -13,6 +13,8 @@ class AIuniusGameMode : public AGameModeBase
 
 public:
 	AIuniusGameMode();
+
+	void LoadDynamicLevel();
 };
 
 

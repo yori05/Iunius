@@ -27,8 +27,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Dash(const FVector & DirectionToDash = FVector::ZeroVector);
 
-	//UFUNCTION(BlueprintCallable)
-	//float GetMoveSpeed() ;
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE class UIuniusCharacterMovementComponent* GetCustomCharacterMovement() { return CustomCharacterMC; }
 
 private:
 	/** Top down camera */
@@ -43,15 +43,14 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* CursorToWorld;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"))
+	class UAIPerceptionComponent* PerceptionComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"))
+	class USkillManagerComponent* SkillManagerComponent;
 protected :
 
 	UPROPERTY(EditAnywhere)
-		class UIuniusCharacterMovementComponent * CustomCharacterMC;
-
-	//UPROPERTY(VisibleAnywhere, EditAnywhere)
-	//class UCharacterMovementComponent * CharacterMovementComponent;
-
-	//UPROPERTY(VisibleAnywhere, EditAnywhere)
-	//	float MoveSpeed = 200.0f;
+	class UIuniusCharacterMovementComponent * CustomCharacterMC;
 };
 

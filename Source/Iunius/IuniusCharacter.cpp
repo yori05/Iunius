@@ -12,7 +12,9 @@
 #include "Materials/Material.h"
 #include "Engine/World.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "IuniusCharacterMovementComponent.h"
+#include "Components/IuniusCharacterMovementComponent.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Components/SkillManagerComponent.h"
 
 AIuniusCharacter::AIuniusCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer.SetDefaultSubobjectClass<UIuniusCharacterMovementComponent>(AIuniusCharacter::CharacterMovementComponentName))
@@ -60,6 +62,11 @@ AIuniusCharacter::AIuniusCharacter(const FObjectInitializer& ObjectInitializer)
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("PerceptionComponent");
+	//PerceptionComponent->ConfigureSense()
+
+	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponent>("SkillManager");
 }
 
 void AIuniusCharacter::Tick(float DeltaSeconds)
@@ -96,9 +103,9 @@ void AIuniusCharacter::Tick(float DeltaSeconds)
 
 void AIuniusCharacter::Dash(const FVector & DirectionToDash)
 {
-	if (CustomCharacterMC)
+	if (SkillManagerComponent)
 	{
-		CustomCharacterMC->Dash(DirectionToDash);
+		SkillManagerComponent->DashRequested(DirectionToDash);
 	}
 }
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "BehaviorTree/BehaviorTreeTypes.h"
 #include "IuniusAIController.generated.h"
 
 /**
@@ -24,6 +25,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Controller")
 	class UBlackboardComponent *CurrentBB;
 
+	UPROPERTY(EditAnywhere, Category = Blackboard)
+		struct FBlackboardKeySelector PawnPointerKey;
+
+	UPROPERTY(EditAnywhere, Category = Blackboard)
+		struct FBlackboardKeySelector PawnLocationKey;
+
 	virtual void BeginPlay()override;
 
+	virtual void InitializeBlackBoardComponent();
 };

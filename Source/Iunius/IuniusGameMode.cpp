@@ -4,6 +4,7 @@
 #include "IuniusPlayerController.h"
 #include "IuniusCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Engine/World.h"
 
 AIuniusGameMode::AIuniusGameMode()
 {
@@ -16,4 +17,8 @@ AIuniusGameMode::AIuniusGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+}
+
+void AIuniusGameMode::LoadDynamicLevel()
+{
 }
