@@ -2,12 +2,15 @@
 
 
 #include "SkillActor.h"
+#include "Components/SceneComponent.h"
 
 // Sets default values
 ASkillActor::ASkillActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	RootComponent = CreateDefaultSubobject<USceneComponent>("Root");
 
 }
 
@@ -25,3 +28,12 @@ void ASkillActor::Tick(float DeltaTime)
 
 }
 
+void ASkillActor::Init(USkillBase* SkillOwner)
+{
+	pSkillOwner = SkillOwner;
+}
+
+bool ASkillActor::AttachRootToActor(USceneComponent * ParentComponent)
+{
+	return RootComponent->AttachTo(ParentComponent, NAME_None, EAttachLocation::SnapToTarget);
+}

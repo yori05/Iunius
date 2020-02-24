@@ -30,6 +30,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE class UIuniusCharacterMovementComponent* GetCustomCharacterMovement() { return CustomCharacterMC; }
 
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE class USceneComponent* GetCharacterRoot() const { return RootComponent; }
+
+	//UFUNCTION(BlueprintCallable)
+	//	FORCEINLINE class UPrimitiveComponent* GetCharacterCollider() { return CapsuleComponent; }
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

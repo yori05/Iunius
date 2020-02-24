@@ -18,11 +18,6 @@ class IUNIUS_API USkillMonoCollider : public USkillMonoActorBase
 protected:
 	virtual void Execute() override;
 
-	void ExecuteHandle();
-
 public:
 	virtual void DetectionMeshBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ASkillActorMeshCollider> CollisionDetection;
 };

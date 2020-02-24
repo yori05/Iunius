@@ -20,7 +20,7 @@ protected:
 		TArray<ASkillActor*> pActors;
 
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<ASkillActor> TypeOfSkillActor;
+		TArray<TSubclassOf<ASkillActor>> TypesOfSkillActors;
 
 public:
 	UFUNCTION(BlueprintCallable)

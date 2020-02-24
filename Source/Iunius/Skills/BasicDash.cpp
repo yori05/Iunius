@@ -5,6 +5,7 @@
 #include "Components/SkillManagerComponent.h"
 #include "IuniusCharacter.h"
 #include "Components/IuniusCharacterMovementComponent.h"
+#include "Engine/World.h"
 
 void UBasicDash::Initialize()
 {
@@ -34,15 +35,25 @@ void UBasicDash::Execute()
 
 	Super::Execute();
 
-	DirectionDash.Normalize();
-	pMovementComponent->Dash(DirectionDash);
+	FinishExecute();
 }
+
+void UBasicDash::FinishExecute()
+{
+	if (pActor && pActor->AttachRootToActor(pOwner->GetCharacterOwner()->GetCharacterRoot()))
+	{
+		pActor->FinishSpawning(pOwner->GetCharacterOwner()->GetTransform());
+		DirectionDash.Normalize();
+		pMovementComponent->Dash(DirectionDash);
+	}
+}
+
 
 void UBasicDash::TickSkill(float DeltaSecond)
 {
 	Super::TickSkill(DeltaSecond);
 
-	if (bIsExecuted && !pMovementComponent->IsDashing())
+	if (bIsExecuted && (!pMovementComponent || !pMovementComponent->IsDashing()))
 		EndExecute();
 }
 
