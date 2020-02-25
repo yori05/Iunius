@@ -28,8 +28,7 @@ void USkillManagerComponent::BeginPlay()
 
 	for (auto it : Skills)
 	{
-		it->SetSkillManager(this);
-		it->Initialize();
+		it->Initialize(this);
 	}
 }
 
@@ -81,6 +80,8 @@ void USkillManagerComponent::DashRequested(const FVector & DirectionDash)
  	if (!Skills.IsValidIndex(0))
  		return;
  
+	Skills[0]->SetTarget(pOwnerCharacter);
+
  	if (!Skills[0]->CanBeExecuted())
  		return;
  
@@ -101,5 +102,7 @@ void USkillManagerComponent::DashRequested(const FVector & DirectionDash)
  	SkillDash->SetDirectionDash(DirectionDash);
  
  	if (SkillDash->RequestExecute())
+		onSkillRequested.Broadcast(1);
+	else
 		onSkillRequested.Broadcast(0);
 }

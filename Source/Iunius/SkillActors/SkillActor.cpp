@@ -3,6 +3,7 @@
 
 #include "SkillActor.h"
 #include "Components/SceneComponent.h"
+#include "Skills/SkillBase.h"
 
 // Sets default values
 ASkillActor::ASkillActor()
@@ -36,4 +37,22 @@ void ASkillActor::Init(USkillBase* SkillOwner)
 bool ASkillActor::AttachRootToActor(USceneComponent * ParentComponent)
 {
 	return RootComponent->AttachTo(ParentComponent, NAME_None, EAttachLocation::SnapToTarget);
+}
+
+void ASkillActor::DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (pSkillOwner)
+	{
+		pSkillOwner->DetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+		OnComponentBeginOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	}
+}
+
+void ASkillActor::DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (pSkillOwner)
+	{
+		pSkillOwner->DetectionColliderEndOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+		OnComponentEndOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+	}
 }

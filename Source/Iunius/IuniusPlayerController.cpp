@@ -26,18 +26,18 @@ void AIuniusPlayerController::PlayerTick(float DeltaTime)
 		bWantToDash = false;
 		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
 		{
-			MyPawn->Dash(MovementVectorThisFrame);
+			MyPawn->SkillDash(MovementVectorThisFrame);
 		}
 		else if (bMoveToMouseCursor)
 		{
 			auto adjusted = MyPawn->GetCursorToWorld()->GetComponentLocation() - MyPawn->GetActorLocation();
 			adjusted.Z = 0;
 			adjusted.Normalize();
-			MyPawn->Dash(adjusted);
+			MyPawn->SkillDash(adjusted);
 		}
 		else
 		{
-			MyPawn->Dash();
+			MyPawn->SkillDash(MyPawn->GetActorForwardVector());
 		}
 	}
 	else

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SkillActors/SkillActor_PrimitiveCollider.h"
+#include "SkillActors/SkillActor.h"
 #include "SkillActor_StaticMeshCollider.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class IUNIUS_API ASkillActor_StaticMeshCollider : public ASkillActor_PrimitiveCollider
+class IUNIUS_API ASkillActor_StaticMeshCollider : public ASkillActor
 {
 	GENERATED_BODY()
 	

@@ -15,10 +15,7 @@ class IUNIUS_API UGoThroughDash : public UBasicDash
 	GENERATED_BODY()
 	
 protected :
-	UPrimitiveComponent * CharacterCollider;
-	virtual void Initialize() override;
-	virtual void FinishExecute() override;
-
+	virtual void AfterSpawnActor() override;
 	virtual void EndExecute() override;
 
 };

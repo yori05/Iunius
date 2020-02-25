@@ -101,13 +101,42 @@ void AIuniusCharacter::Tick(float DeltaSeconds)
 	}
 }
 
-void AIuniusCharacter::Dash(const FVector & DirectionToDash)
+void AIuniusCharacter::SkillDash(const FVector & DirectionToDash)
 {
 	if (SkillManagerComponent)
 	{
 		SkillManagerComponent->DashRequested(DirectionToDash);
 	}
 }
+
+void AIuniusCharacter::MovementDash(const FVector& DirectionToDash)
+{
+	if (CustomCharacterMC)
+	{
+		CustomCharacterMC->Dash(DirectionToDash);
+	}
+}
+
+uint8 AIuniusCharacter::CanMovementDash()
+{
+	return (CustomCharacterMC) ? CustomCharacterMC->CanDash() : 0;
+}
+
+void AIuniusCharacter::SetCollisionProfileName(FName ChannelColision)
+{
+	auto caps = GetCapsuleComponent();
+
+	if (caps)
+	{
+		caps->SetCollisionProfileName(ChannelColision);
+	}
+}
+
+uint8 AIuniusCharacter::IsDashing()
+{
+	return (CustomCharacterMC) ? CustomCharacterMC->IsDashing() : 0;
+}
+
 
 /*
 void ATDTopDownCharacter::Tick(float DeltaSeconds)

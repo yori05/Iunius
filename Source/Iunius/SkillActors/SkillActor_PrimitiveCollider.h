@@ -17,11 +17,11 @@ class IUNIUS_API ASkillActor_PrimitiveCollider : public ASkillActor
 	GENERATED_BODY()
 
 protected :
-	UPROPERTY(EditAnywhere)
-	UPrimitiveComponent* ColliderComponent;
+	//UPROPERTY(EditAnywhere)
+	//UPrimitiveComponent* ColliderComponent;
 
 public :
-	UFUNCTION(BlueprintCallable)
-	UPrimitiveComponent* GetColliderComponent() { return ColliderComponent; }
+	//UFUNCTION(BlueprintCallable)
+	//UPrimitiveComponent* GetColliderComponent() { return ColliderComponent; }
 
 };

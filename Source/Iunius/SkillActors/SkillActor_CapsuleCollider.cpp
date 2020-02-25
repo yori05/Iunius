@@ -9,5 +9,9 @@ ASkillActor_CapsuleCollider::ASkillActor_CapsuleCollider()
 	ColliderComponent = CreateDefaultSubobject<UCapsuleComponent>("DetectionMesh");
 
 	if (ColliderComponent && RootComponent)
+	{
 		ColliderComponent->SetupAttachment(RootComponent);
+		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor_CapsuleCollider::DetectionColliderBeginOverlap);
+		ColliderComponent->OnComponentEndOverlap.AddUniqueDynamic(this, &ASkillActor_CapsuleCollider::DetectionColliderEndOverlap);
+	}
 }

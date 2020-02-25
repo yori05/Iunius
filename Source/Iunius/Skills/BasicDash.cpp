@@ -4,47 +4,14 @@
 #include "BasicDash.h"
 #include "Components/SkillManagerComponent.h"
 #include "IuniusCharacter.h"
-#include "Components/IuniusCharacterMovementComponent.h"
 #include "Engine/World.h"
 
-void UBasicDash::Initialize()
+void UBasicDash::AfterSpawnActor()
 {
-	Super::Initialize();
-	pMovementComponent = pOwner->GetCharacterOwner()->GetCustomCharacterMovement();
-}
-
-uint8 UBasicDash::RequestExecute()
-{
-	if (!CanBeExecuted())
+	if (pTarget)
 	{
-		onRequestExecuted.Broadcast(false);
-		return 0;
-	}
-
-	onRequestExecuted.Broadcast(true);
-	Execute();
-	return 1;
-}
-
-void UBasicDash::Execute()
-{
-	if (!CanBeExecuted())
-	{
-		return;
-	}
-
-	Super::Execute();
-
-	FinishExecute();
-}
-
-void UBasicDash::FinishExecute()
-{
-	if (pActor && pActor->AttachRootToActor(pOwner->GetCharacterOwner()->GetCharacterRoot()))
-	{
-		pActor->FinishSpawning(pOwner->GetCharacterOwner()->GetTransform());
 		DirectionDash.Normalize();
-		pMovementComponent->Dash(DirectionDash);
+		pTarget->MovementDash(DirectionDash);
 	}
 }
 
@@ -53,7 +20,7 @@ void UBasicDash::TickSkill(float DeltaSecond)
 {
 	Super::TickSkill(DeltaSecond);
 
-	if (bIsExecuted && (!pMovementComponent || !pMovementComponent->IsDashing()))
+	if (bIsExecuted && (!pTarget || !pTarget->IsDashing()))
 		EndExecute();
 }
 
@@ -66,5 +33,5 @@ void UBasicDash::EndExecute()
 
 uint8 UBasicDash::CanBeExecuted()
 {
-	return Super::CanBeExecuted() && pMovementComponent && pMovementComponent->CanDash();
+	return Super::CanBeExecuted() && pTarget && pTarget->CanMovementDash();
 }

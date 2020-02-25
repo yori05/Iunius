@@ -4,30 +4,23 @@
 #include "GoThroughDash.h"
 #include "Components/SkillManagerComponent.h"
 #include "IuniusCharacter.h"
-#include "Components/CapsuleComponent.h"
 
-void UGoThroughDash::Initialize()
+void UGoThroughDash::AfterSpawnActor()
 {
-	Super::Initialize();
-	CharacterCollider = pOwner->GetCharacterOwner()->GetCapsuleComponent();
-}
-
-void UGoThroughDash::FinishExecute()
-{
-	if (CharacterCollider)
+	Super::AfterSpawnActor();
+	
+	if (pTarget)
 	{
-		CharacterCollider->SetCollisionProfileName(TEXT("DashOverlap"));
+		pTarget->SetCollisionProfileName(TEXT("DashOverlap"));
 	}
-
-	Super::FinishExecute();
 }
 
 void UGoThroughDash::EndExecute()
 {
 	Super::EndExecute();
 
-	if (CharacterCollider)
+	if (pTarget)
 	{
-		CharacterCollider->SetCollisionProfileName(TEXT("Pawn"));
+		pTarget->SetCollisionProfileName(TEXT("DashOverlap"));
 	}
 }

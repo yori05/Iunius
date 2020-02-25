@@ -25,7 +25,19 @@ public:
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
 
 	UFUNCTION(BlueprintCallable)
-	void Dash(const FVector & DirectionToDash = FVector::ZeroVector);
+	void SkillDash(const FVector & DirectionToDash);
+
+	UFUNCTION(BlueprintCallable)
+		void MovementDash(const FVector& DirectionToDash);
+
+	UFUNCTION(BlueprintCallable)
+	uint8 CanMovementDash();
+
+	UFUNCTION(BlueprintCallable)
+		uint8 IsDashing();
+
+	UFUNCTION(BlueprintCallable)
+		void SetCollisionProfileName(FName ChannelColision);
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE class UIuniusCharacterMovementComponent* GetCustomCharacterMovement() { return CustomCharacterMC; }
