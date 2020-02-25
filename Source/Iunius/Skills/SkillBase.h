@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Engine/EngineTypes.h"
 #include "Components/PrimitiveComponent.h"
+#include "DamageEnums.h"
 #include "SkillBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSkillDelegate);
@@ -15,6 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillBoolDelegate, bool, SuccessFul
 class USkillManagerComponent;
 class ASkillActor;
 class AIuniusCharacter;
+
 /**
  * 
  */
@@ -34,6 +36,15 @@ public:
 		FSkillDelegate onExecuted;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+		FSkillDelegate OnBeforeSpawnActor;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+		FSkillDelegate OnHalfwaySpawnActor;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+		FSkillDelegate OnAfterSpawnActor;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 		FSkillDelegate onEndExecution;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
@@ -46,34 +57,40 @@ public:
 		FComponentEndOverlapSignature OnSkillActorEndOverlap;
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, Category = "MainData")
 		USkillManagerComponent* pOwner = nullptr;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, Category = "MainData")
 		ASkillActor* pActor = nullptr;
 
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<class ASkillActor> TypeOfSkillActor = nullptr;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, Category = "MainData")
 		AIuniusCharacter* pTarget = nullptr;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Actor")
+		TSubclassOf<class ASkillActor> TypeOfSkillActor = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "MainData")
 		float Cooldown = 0.0f;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, Category = "MainData")
 		float CooldownTimer = 0.0f;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		float DamageValue = 0.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+		EDamageElement DamageElement = EDamageElement::DamageResult_None;
+
+	UPROPERTY(BlueprintReadOnly, Category = "MainData")
 		uint8 bIsExecuted = 0;
 
-	UPROPERTY(EditAnywhere)
-		uint8 bKillActorEndExecute = 1;
+	UPROPERTY(EditAnywhere, Category = "MainData")
+		uint8 bKillActorEndExecute = 1; //if set to false you will have to destroy the SkillActorManualy later
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "MainData")
 		uint8 bLinkActorToTarget = 1;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "MainData")
 		uint8 bIsLocker = 0; //Set if this skill lock other skill when he is executed;
 
 protected:
@@ -119,6 +136,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 public:
 	UFUNCTION(BlueprintCallable)

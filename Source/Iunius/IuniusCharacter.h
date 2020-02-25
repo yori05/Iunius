@@ -28,7 +28,7 @@ public:
 	void SkillDash(const FVector & DirectionToDash);
 
 	UFUNCTION(BlueprintCallable)
-		void MovementDash(const FVector& DirectionToDash);
+		void MovementDash(const FVector& DirectionToDash, float Duration = 0.25f, float Speed = 2500.0f);
 
 	UFUNCTION(BlueprintCallable)
 	uint8 CanMovementDash();
@@ -44,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE class USceneComponent* GetCharacterRoot() const { return RootComponent; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE class UHealthComponent* GetHealthComponent() const { return HealthComponent; }
 
 	//UFUNCTION(BlueprintCallable)
 	//	FORCEINLINE class UPrimitiveComponent* GetCharacterCollider() { return CapsuleComponent; }
@@ -64,11 +67,13 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"))
 	class UAIPerceptionComponent* PerceptionComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Skill, meta = (AllowPrivateAccess = "true"))
 	class USkillManagerComponent* SkillManagerComponent;
-protected :
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health, meta = (AllowPrivateAccess = "true"))
+	class UHealthComponent * HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UIuniusCharacterMovementComponent * CustomCharacterMC;
 };
 

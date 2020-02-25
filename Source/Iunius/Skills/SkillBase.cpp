@@ -7,6 +7,7 @@
 #include "IuniusCharacter.h"
 #include "SkillActors/SkillActor.h"
 #include "Engine/Engine.h"
+#include "Components/DamagerComponent.h"
 
 void USkillBase::Initialize(USkillManagerComponent* _Owner)
 {
@@ -19,6 +20,7 @@ void USkillBase::Execute()
 	bIsExecuted = 1;
 
 	BeforeSpawnActor();
+	OnBeforeSpawnActor.Broadcast();
 
 	if (pOwner && pOwner->GetWorld() && pOwner->GetCharacterOwner() && TypeOfSkillActor)
 	{
@@ -28,13 +30,26 @@ void USkillBase::Execute()
 		if (World && Character && !pActor)
 		{
 			pActor = World->SpawnActorDeferred<ASkillActor>(TypeOfSkillActor, Character->GetTransform());
+			if (pActor)
+			{
+				pActor->SetSkillOwner(this);
+
+				auto Damager = pActor->GetDamagerComponent();
+				if (Damager)
+				{
+					Damager->ElementDamager = DamageElement;
+				}
+
+			}
 		}
 	}
 
 	HalfWaySpawnActor();
+	OnHalfwaySpawnActor.Broadcast();
 
 	if (pActor)
 	{
+
 		auto Character = pOwner->GetCharacterOwner();
 		pActor->FinishSpawning(Character->GetTransform());
 		
@@ -43,22 +58,25 @@ void USkillBase::Execute()
 	}
 
 	AfterSpawnActor();
+	OnAfterSpawnActor.Broadcast();
 
 	onExecuted.Broadcast();
 }
 
 void USkillBase::BeforeSpawnActor()
 {
-
+	//Executed before the Deferred Spawn of the SkillActor
 }
 
 void USkillBase::HalfWaySpawnActor()
 {
+	//Executed when the SkillActor is Spawn but he don't have finish his Spawning 
 
 }
 
 void USkillBase::AfterSpawnActor()
 {
+	//Executed after the SkillActor as finish his Spawning 
 
 }
 
@@ -86,11 +104,15 @@ void USkillBase::TickSkill(float DeltaSecond)
 void USkillBase::DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	OnSkillActorBeginOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	if (pActor)
+		pActor->OnColliderBeginOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }
 
 void USkillBase::DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	OnSkillActorEndOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+	if (pActor)
+		pActor->OnColliderEndOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
 }
 
 uint8 USkillBase::RequestExecute()

@@ -7,6 +7,7 @@
 #include "SkillManagerComponent.generated.h"
 
 class AIuniusCharacter;
+class USkillBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkillMngrIntDelegate, const int32, SkillIndex);
 
@@ -24,7 +25,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, Instanced)
-	TArray<class USkillBase*> Skills;
+	TArray<USkillBase*> Skills;
 	AIuniusCharacter *pOwnerCharacter;
 
 public:	
@@ -47,4 +48,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void DashRequested(const FVector & DirectionDash);
+
+	UFUNCTION(BlueprintCallable)
+	USkillBase* GetDashSkill();
 };

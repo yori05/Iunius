@@ -4,6 +4,7 @@
 #include "SkillActor.h"
 #include "Components/SceneComponent.h"
 #include "Skills/SkillBase.h"
+#include "Components/DamagerComponent.h"
 
 // Sets default values
 ASkillActor::ASkillActor()
@@ -12,7 +13,7 @@ ASkillActor::ASkillActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>("Root");
-
+	DamagerComponent = CreateDefaultSubobject<UDamagerComponent>("DamagerComponent");
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +21,11 @@ void ASkillActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (ColliderComponent)
+	{
+		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor::DetectionColliderBeginOverlap);
+		ColliderComponent->OnComponentEndOverlap.AddUniqueDynamic(this, &ASkillActor::DetectionColliderEndOverlap);
+	}
 }
 
 // Called every frame
@@ -34,25 +40,24 @@ void ASkillActor::Init(USkillBase* SkillOwner)
 	pSkillOwner = SkillOwner;
 }
 
-bool ASkillActor::AttachRootToActor(USceneComponent * ParentComponent)
+bool ASkillActor::AttachRootToActor(USceneComponent * ComponentLinked)
 {
-	return RootComponent->AttachTo(ParentComponent, NAME_None, EAttachLocation::SnapToTarget);
+	return RootComponent->AttachToComponent(ComponentLinked, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 void ASkillActor::DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (pSkillOwner)
-	{
 		pSkillOwner->DetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-		OnComponentBeginOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-	}
 }
 
 void ASkillActor::DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (pSkillOwner)
-	{
 		pSkillOwner->DetectionColliderEndOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
-		OnComponentEndOverlap.Broadcast(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
-	}
+}
+
+void ASkillActor::DestroySkillActor()
+{
+	Destroy();
 }

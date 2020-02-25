@@ -10,6 +10,7 @@
 
 class USkillBase;
 class USceneComponent;
+class UDamagerComponent;
 
 UCLASS()
 class IUNIUS_API ASkillActor : public AActor
@@ -22,10 +23,10 @@ public:
 
 public :
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-		FComponentBeginOverlapSignature OnComponentBeginOverlap;
+		FComponentBeginOverlapSignature OnColliderBeginOverlap;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-		FComponentEndOverlapSignature OnComponentEndOverlap;
+		FComponentEndOverlapSignature OnColliderEndOverlap;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,6 +38,9 @@ protected :
 
 	UPROPERTY(EditAnywhere)
 	UPrimitiveComponent* ColliderComponent = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UDamagerComponent* DamagerComponent = nullptr;
 
 public:	//Membre
 	// Called every frame
@@ -57,8 +61,13 @@ public:	//Membre
 	UFUNCTION(BlueprintCallable)
 		virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	void DestroySkillActor();
+
 public : //Accesseur
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UPrimitiveComponent* GetColliderComponent() { return ColliderComponent; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UDamagerComponent* GetDamagerComponent() { return DamagerComponent; }
 
 };

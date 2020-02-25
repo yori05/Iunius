@@ -32,13 +32,14 @@ protected :
 
 	FVector DirectionDash = FVector::ForwardVector;
 
+	UPROPERTY(VisibleAnywhere, Category = "Dash")
 	float DashTimer = 0.0f;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Dash")
+	UPROPERTY(VisibleAnywhere, Category = "Dash")
 		float DashDuration = 0.25f;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Dash")
-		float SpeedDash = 3000.0f;
+	UPROPERTY(VisibleAnywhere, Category = "Dash")
+		float DashSpeed = 2500.0f;
 
 public :
 	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Custom")
@@ -51,7 +52,7 @@ public :
 	FMovementVectorDelegate OnDash;
 
 	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Dash")
-		virtual void Dash(const FVector & DirectionToDash);
+		virtual void Dash(const FVector & DirectionToDash, float Duration = 0.25f, float Speed = 2500.0f);
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 		FMovementDelegate OnStopDash;
@@ -66,5 +67,10 @@ public :
 
 	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Dash" )
 	virtual void PhysDash(float deltaTime, int32 Iterations);
+
+	float GetDashRemanantTime() { return (DashTimer <= 0.f) ? 0.0f : DashTimer; }
+	float GetDashRemanantTimeRatio() { return (DashTimer <= 0.f || DashDuration < 0.0001f) ? 0.0f : DashTimer / DashDuration; }
+	float GetDashDuration() { return DashDuration; }
+	float GetDashSpeed() { return DashSpeed; }
 
 };

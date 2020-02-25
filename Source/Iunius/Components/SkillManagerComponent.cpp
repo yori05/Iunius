@@ -4,7 +4,7 @@
 #include "SkillManagerComponent.h"
 #include "Skills/SkillBase.h"
 #include "IuniusCharacter.h"
-#include "Skills/BasicDash.h"
+#include "Skills/Dash_Basic.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
 
@@ -94,7 +94,7 @@ void USkillManagerComponent::DashRequested(const FVector & DirectionDash)
 	//if (GEngine && GetWorld())
 	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("Emplacement Scene => ")) + GetWorld()->GetLocalURL());
 
- 	auto SkillDash = Cast<UBasicDash, USkillBase>(Skills[0]);
+ 	auto SkillDash = Cast<UDash_Basic, USkillBase>(Skills[0]);
   
 	if (!SkillDash)
 		return;
@@ -105,4 +105,12 @@ void USkillManagerComponent::DashRequested(const FVector & DirectionDash)
 		onSkillRequested.Broadcast(1);
 	else
 		onSkillRequested.Broadcast(0);
+}
+
+USkillBase* USkillManagerComponent::GetDashSkill()
+{
+	if (!Skills.IsValidIndex(0))
+		return nullptr;
+
+	return Skills[0];
 }

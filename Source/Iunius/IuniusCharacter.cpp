@@ -15,6 +15,7 @@
 #include "Components/IuniusCharacterMovementComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Components/SkillManagerComponent.h"
+#include "Components/HealthComponent.h"
 
 AIuniusCharacter::AIuniusCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer.SetDefaultSubobjectClass<UIuniusCharacterMovementComponent>(AIuniusCharacter::CharacterMovementComponentName))
@@ -67,6 +68,8 @@ AIuniusCharacter::AIuniusCharacter(const FObjectInitializer& ObjectInitializer)
 	//PerceptionComponent->ConfigureSense()
 
 	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponent>("SkillManager");
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>("HealthComponent");
 }
 
 void AIuniusCharacter::Tick(float DeltaSeconds)
@@ -109,11 +112,11 @@ void AIuniusCharacter::SkillDash(const FVector & DirectionToDash)
 	}
 }
 
-void AIuniusCharacter::MovementDash(const FVector& DirectionToDash)
+void AIuniusCharacter::MovementDash(const FVector& DirectionToDash, float Duration, float Speed)
 {
 	if (CustomCharacterMC)
 	{
-		CustomCharacterMC->Dash(DirectionToDash);
+		CustomCharacterMC->Dash(DirectionToDash, Duration, Speed);
 	}
 }
 

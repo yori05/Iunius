@@ -16,5 +16,4 @@ class IUNIUS_API ASkillActor_StaticMeshCollider : public ASkillActor
 	
 public :
 	ASkillActor_StaticMeshCollider();
-
 };
