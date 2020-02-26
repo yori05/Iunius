@@ -21,24 +21,44 @@ void AIuniusPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
+	MovementVectorThisFrame.Normalize();
+
+	DirectionCursor = MyPawn->GetCursorToWorld()->GetComponentLocation() - MyPawn->GetActorLocation();
+	DirectionCursor.Z = 0;
+
+	if (DirectionCursor.IsNearlyZero())
+	{
+		DirectionCursor = MyPawn->GetActorForwardVector();
+	}
+
+	DirectionCursor.Normalize();
+
+	if (MyPawn->GetCanRotate())
+	{
+		auto temp = (DirectionCursor).ToOrientationRotator();
+		MyPawn->SetActorRotation(temp);
+	}
+
 	if (bWantToDash)
 	{
 		bWantToDash = false;
-		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
-		{
-			MyPawn->SkillDash(MovementVectorThisFrame);
-		}
-		else if (bMoveToMouseCursor)
-		{
-			auto adjusted = MyPawn->GetCursorToWorld()->GetComponentLocation() - MyPawn->GetActorLocation();
-			adjusted.Z = 0;
-			adjusted.Normalize();
-			MyPawn->SkillDash(adjusted);
-		}
-		else
-		{
-			MyPawn->SkillDash(MyPawn->GetActorForwardVector());
-		}
+		MyPawn->SkillDash(DirectionCursor);
+
+// 		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
+// 		{
+// 			MyPawn->SkillDash(MovementVectorThisFrame);
+// 		}
+// 		else if (bMoveToMouseCursor)
+// 		{
+// 			auto adjusted = MyPawn->GetCursorToWorld()->GetComponentLocation() - MyPawn->GetActorLocation();
+// 			adjusted.Z = 0;
+// 			adjusted.Normalize();
+// 			MyPawn->SkillDash(adjusted);
+// 		}
+// 		else
+// 		{
+// 			MyPawn->SkillDash(MyPawn->GetActorForwardVector());
+// 		}
 	}
 	else
 	{
@@ -95,7 +115,6 @@ void AIuniusPlayerController::MoveRight(float _value)
 
 void AIuniusPlayerController::MoveFromMovementVector(float DeltaTime)
 {
-	MovementVectorThisFrame.Normalize();
 	auto world = GetWorld();
 
 	if (MyPawn && world)

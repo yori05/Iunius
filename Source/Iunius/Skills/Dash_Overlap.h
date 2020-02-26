@@ -18,6 +18,8 @@ class IUNIUS_API UDash_Overlap : public UDash_GoThrough
 	
 protected :
 
+	virtual void HalfWaySpawnActor() override;
+
 	virtual void DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
 	virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;

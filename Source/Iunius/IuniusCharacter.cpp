@@ -116,6 +116,7 @@ void AIuniusCharacter::MovementDash(const FVector& DirectionToDash, float Durati
 {
 	if (CustomCharacterMC)
 	{
+		CustomCharacterMC->StopMovementImmediately();
 		CustomCharacterMC->Dash(DirectionToDash, Duration, Speed);
 	}
 }

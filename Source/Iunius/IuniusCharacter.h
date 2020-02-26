@@ -48,6 +48,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE class UHealthComponent* GetHealthComponent() const { return HealthComponent; }
 
+	UFUNCTION(BlueprintCallable)
+		void ChangeCanRotate(uint8 CanRotate) { bCanRotate = CanRotate; }
+
+	UFUNCTION(BlueprintCallable)
+		uint8 GetCanRotate() { return bCanRotate; }
+
 	//UFUNCTION(BlueprintCallable)
 	//	FORCEINLINE class UPrimitiveComponent* GetCharacterCollider() { return CapsuleComponent; }
 
@@ -75,5 +81,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UIuniusCharacterMovementComponent * CustomCharacterMC;
+
+	UPROPERTY(EditAnywhere, Category = Movement)
+		uint8 bCanRotate = true;
 };
 

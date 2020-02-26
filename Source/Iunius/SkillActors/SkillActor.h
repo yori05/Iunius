@@ -11,6 +11,7 @@
 class USkillBase;
 class USceneComponent;
 class UDamagerComponent;
+class UProjectileMovementComponent;
 
 UCLASS()
 class IUNIUS_API ASkillActor : public AActor
@@ -28,6 +29,10 @@ public :
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 		FComponentEndOverlapSignature OnColliderEndOverlap;
 
+	//Pointer for the function the skill want to link to this actor
+	void (*FSkill_OnBeginOverlap)(USkillBase* SkillLauncher, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) = nullptr;
+	void(*FSkill_OnEndOverlap)(USkillBase* SkillLauncher, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) = nullptr;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,6 +46,12 @@ protected :
 
 	UPROPERTY(EditAnywhere)
 	UDamagerComponent* DamagerComponent = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* StaticMeshComponent = nullptr;
 
 public:	//Membre
 	// Called every frame
@@ -68,6 +79,11 @@ public : //Accesseur
 	FORCEINLINE UPrimitiveComponent* GetColliderComponent() { return ColliderComponent; }
 
 	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UStaticMeshComponent* GetStaticMeshComponent() { return StaticMeshComponent; }
+
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UDamagerComponent* GetDamagerComponent() { return DamagerComponent; }
 
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UProjectileMovementComponent* GetProjectileMovementComponent() { return ProjectileMovementComponent; }
 };

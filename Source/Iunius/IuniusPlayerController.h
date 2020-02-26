@@ -30,6 +30,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	FVector MovementVectorThisFrame = FVector::ZeroVector;
 
+	UPROPERTY(VisibleAnywhere)
+	FVector DirectionCursor = FVector::ZeroVector;
+
 	class AIuniusCharacter* MyPawn = nullptr;
  
 	void MoveFromMovementVector(float DeltaTime);

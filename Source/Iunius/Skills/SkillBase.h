@@ -61,10 +61,10 @@ protected:
 		USkillManagerComponent* pOwner = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, Category = "MainData")
-		ASkillActor* pActor = nullptr;
+		AIuniusCharacter* pTarget = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, Category = "MainData")
-		AIuniusCharacter* pTarget = nullptr;
+		ASkillActor* pActor = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Actor")
 		TSubclassOf<class ASkillActor> TypeOfSkillActor = nullptr;
@@ -131,12 +131,27 @@ public:
 	UFUNCTION(BlueprintCallable)
 		uint8 IsLocked() { return (bIsLocker) ? bIsExecuted : bIsLocker; }
 
+	//What will be done when the Collider linked to this func will Begin Overlap
 	UFUNCTION(BlueprintCallable)
 		virtual void DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	//What will be done when the Collider linked to this func will End Overlap
 	UFUNCTION(BlueprintCallable)
 		virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	//Used to launch DetectionColliderBeginOverlap easly from a funcPointer
+	static void FDetectiocColliderBeginOverlap_Static(USkillBase* SkillLauncher, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+	{
+		if (SkillLauncher)
+			SkillLauncher->DetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	}
+
+	//Used to launch DetectionColliderEndOverlap easly from a funcPointer
+	static void FDetectiocColliderEndOverlap_Static(USkillBase* SkillLauncher, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+	{
+		if (SkillLauncher)
+			SkillLauncher->DetectionColliderEndOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+	}
 
 public:
 	UFUNCTION(BlueprintCallable)

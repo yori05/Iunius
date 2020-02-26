@@ -3,15 +3,21 @@
 
 #include "SkillActor_CapsuleCollider.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 ASkillActor_CapsuleCollider::ASkillActor_CapsuleCollider()
 {
-	ColliderComponent = CreateDefaultSubobject<UCapsuleComponent>("DetectionMesh");
+	ColliderComponent = CreateDefaultSubobject<UCapsuleComponent>("DetectionCapsule");
 
 	if (ColliderComponent && RootComponent)
 	{
 		ColliderComponent->SetupAttachment(RootComponent);
 		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor_CapsuleCollider::DetectionColliderBeginOverlap);
 		ColliderComponent->OnComponentEndOverlap.AddUniqueDynamic(this, &ASkillActor_CapsuleCollider::DetectionColliderEndOverlap);
+
+		if (StaticMeshComponent)
+		{
+			StaticMeshComponent->SetupAttachment(ColliderComponent);
+		}
 	}
 }
