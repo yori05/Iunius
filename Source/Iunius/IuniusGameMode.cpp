@@ -17,6 +17,8 @@ AIuniusGameMode::AIuniusGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+
 }
 
 void AIuniusGameMode::LoadDynamicLevel()

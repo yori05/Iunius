@@ -41,6 +41,7 @@ protected :
 	UPROPERTY(VisibleAnywhere, Category = "Dash")
 		float DashSpeed = 2500.0f;
 
+	uint8 bPreviousOrientToMovement;
 public :
 	UFUNCTION(BlueprintCallable, Category = "Pawn|Components|CharacterMovement|Custom")
 		uint8 GetCustomMode() const;

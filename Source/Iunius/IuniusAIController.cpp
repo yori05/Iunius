@@ -30,7 +30,7 @@ void AIuniusAIController::InitializeBlackBoardComponent()
 
 	if (MyPawn)
 	{
-		CurrentBB->SetValueAsObject(PawnPointerKey.SelectedKeyName, MyPawn);
-		CurrentBB->SetValueAsVector(PawnLocationKey.SelectedKeyName, MyPawn->GetActorLocation());
+		CurrentBB->SetValueAsObject(PawnPointerKey, MyPawn);
+		CurrentBB->SetValueAsVector(PawnLocationKey, MyPawn->GetActorLocation());
 	}
 }

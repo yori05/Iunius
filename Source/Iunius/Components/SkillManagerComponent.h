@@ -50,5 +50,8 @@ public:
 		void DashRequested(const FVector & DirectionDash);
 
 	UFUNCTION(BlueprintCallable)
+		void AttackRequested(const FVector& DirectionAttack);
+
+	UFUNCTION(BlueprintCallable)
 	USkillBase* GetDashSkill();
 };

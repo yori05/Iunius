@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/PrimitiveComponent.h"
-
 #include "SkillActor.generated.h"
 
 class USkillBase;
 class USceneComponent;
 class UDamagerComponent;
 class UProjectileMovementComponent;
+class UHealerComponent;
 
 UCLASS()
 class IUNIUS_API ASkillActor : public AActor
@@ -53,6 +53,9 @@ protected :
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	UHealerComponent* HealerComponent = nullptr;
+
 public:	//Membre
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -83,6 +86,9 @@ public : //Accesseur
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UDamagerComponent* GetDamagerComponent() { return DamagerComponent; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UHealerComponent* GetHealerComponent() { return HealerComponent; }
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UProjectileMovementComponent* GetProjectileMovementComponent() { return ProjectileMovementComponent; }

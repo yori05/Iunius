@@ -25,10 +25,16 @@ public:
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
 
 	UFUNCTION(BlueprintCallable)
+		void UseSkill(int32 SkillIndex);
+
+	UFUNCTION(BlueprintCallable)
 	void SkillDash(const FVector & DirectionToDash);
 
 	UFUNCTION(BlueprintCallable)
-		void MovementDash(const FVector& DirectionToDash, float Duration = 0.25f, float Speed = 2500.0f);
+	void SkillAttack(const FVector& DirectionToAttack);
+
+	UFUNCTION(BlueprintCallable)
+	void MovementDash(const FVector& DirectionToDash, float Duration = 0.25f, float Speed = 2500.0f);
 
 	UFUNCTION(BlueprintCallable)
 	uint8 CanMovementDash();
@@ -54,6 +60,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 		uint8 GetCanRotate() { return bCanRotate; }
 
+	UFUNCTION(BlueprintCallable)
+		void ChangeCanMove(uint8 NewCanMove) { bCanMove = NewCanMove; }
+
+	UFUNCTION(BlueprintCallable)
+		uint8 GetCanMove() { return bCanMove; }
+
+	UFUNCTION(BlueprintCallable)
+		void ChangeCanUseSkill(uint8 NewCanUseSkill) { bCanUseSkill = NewCanUseSkill; }
+
+	UFUNCTION(BlueprintCallable)
+		uint8 GetCanUseSkill() { return bCanUseSkill; }
+
 	//UFUNCTION(BlueprintCallable)
 	//	FORCEINLINE class UPrimitiveComponent* GetCharacterCollider() { return CapsuleComponent; }
 
@@ -73,16 +91,24 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Perception, meta = (AllowPrivateAccess = "true"))
 	class UAIPerceptionComponent* PerceptionComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Skill, meta = (AllowPrivateAccess = "true"))
+protected :
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Skill)
 	class USkillManagerComponent* SkillManagerComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health, meta = (AllowPrivateAccess = "true"))
-	class UHealthComponent * HealthComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	class UHealthComponent* HealthComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Movement)
 	class UIuniusCharacterMovementComponent * CustomCharacterMC;
 
 	UPROPERTY(EditAnywhere, Category = Movement)
-		uint8 bCanRotate = true;
+	uint8 bCanRotate = true;
+
+	UPROPERTY(EditAnywhere, Category = Movement)
+	uint8 bCanMove = true;
+
+	UPROPERTY(EditAnywhere, Category = Skill)
+		uint8 bCanUseSkill = true;
+
 };
 

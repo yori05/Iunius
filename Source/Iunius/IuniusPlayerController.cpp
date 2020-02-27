@@ -33,43 +33,30 @@ void AIuniusPlayerController::PlayerTick(float DeltaTime)
 
 	DirectionCursor.Normalize();
 
+	if (MyPawn->GetCanUseSkill())
+	{
+		if (bWantToDash)
+		{
+			bWantToDash = false;
+			MyPawn->SkillDash(DirectionCursor);
+		}
+		if (bWantToAttack)
+		{
+			bWantToAttack = false;
+			MyPawn->SkillAttack(DirectionCursor);
+		}
+	}
 	if (MyPawn->GetCanRotate())
 	{
 		auto temp = (DirectionCursor).ToOrientationRotator();
 		MyPawn->SetActorRotation(temp);
 	}
-
-	if (bWantToDash)
-	{
-		bWantToDash = false;
-		MyPawn->SkillDash(DirectionCursor);
-
-// 		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
-// 		{
-// 			MyPawn->SkillDash(MovementVectorThisFrame);
-// 		}
-// 		else if (bMoveToMouseCursor)
-// 		{
-// 			auto adjusted = MyPawn->GetCursorToWorld()->GetComponentLocation() - MyPawn->GetActorLocation();
-// 			adjusted.Z = 0;
-// 			adjusted.Normalize();
-// 			MyPawn->SkillDash(adjusted);
-// 		}
-// 		else
-// 		{
-// 			MyPawn->SkillDash(MyPawn->GetActorForwardVector());
-// 		}
-	}
-	else
+	if (MyPawn->GetCanMove())
 	{
 		// keep updating the destination every tick while desired
 		if (MovementVectorThisFrame.SizeSquared() > 0.0f)
 		{
 			MoveFromMovementVector(DeltaTime);
-		}
-		else if (bMoveToMouseCursor)
-		{
-			MoveToMouseCursor();
 		}
 	}
 
@@ -90,17 +77,12 @@ void AIuniusPlayerController::SetupInputComponent()
 	// set up gameplay key bindings
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("SetDestination", IE_Pressed, this, &AIuniusPlayerController::OnSetDestinationPressed);
-	InputComponent->BindAction("SetDestination", IE_Released, this, &AIuniusPlayerController::OnSetDestinationReleased);
-
-	// support touch devices 
-	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AIuniusPlayerController::MoveToTouchLocation);
-	InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AIuniusPlayerController::MoveToTouchLocation);
-
 	InputComponent->BindAxis("MoveForward", this, &AIuniusPlayerController::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AIuniusPlayerController::MoveRight);
 
 	InputComponent->BindAction("Dash", IE_Pressed, this, &AIuniusPlayerController::Dash);
+	InputComponent->BindAction("Attack", IE_Pressed, this, &AIuniusPlayerController::Attack);
+
 }
 
 void AIuniusPlayerController::MoveForward(float _value)
@@ -125,80 +107,16 @@ void AIuniusPlayerController::MoveFromMovementVector(float DeltaTime)
 			auto Destination = MyPawn->GetActorLocation() + MovementVectorThisFrame * 10000.0f * DeltaTime;
 			Destination = navSys->ProjectPointToNavigation(world, Destination);
 			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, Destination);
-			//if (GEngine)
-			//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("Destination => X : %f Y : %f Z : %f"), Destination.X,Destination.Y,Destination.Z));
 		}
 	}
-}
-
-void AIuniusPlayerController::MoveToMouseCursor()
-{
-	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled())
-	{
-		if (MyPawn)
-		{
-			if (MyPawn->GetCursorToWorld())
-			{
-				UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, MyPawn->GetCursorToWorld()->GetComponentLocation());
-			}
-		}
-	}
-	else
-	{
-		// Trace to see what is under the mouse cursor
-		FHitResult Hit;
-		GetHitResultUnderCursor(ECC_Visibility, false, Hit);
-
-		if (Hit.bBlockingHit)
-		{
-			// We hit something, move there
-			SetNewMoveDestination(Hit.ImpactPoint);
-		}
-	}
-}
-
-void AIuniusPlayerController::MoveToTouchLocation(const ETouchIndex::Type FingerIndex, const FVector Location)
-{
-	FVector2D ScreenSpaceLocation(Location);
-
-	// Trace to see what is under the touch location
-	FHitResult HitResult;
-	GetHitResultAtScreenPosition(ScreenSpaceLocation, CurrentClickTraceChannel, true, HitResult);
-	if (HitResult.bBlockingHit)
-	{
-		// We hit something, move there
-		SetNewMoveDestination(HitResult.ImpactPoint);
-	}
-}
-
-void AIuniusPlayerController::SetNewMoveDestination(const FVector DestLocation)
-{
-	//APawn* const MyPawn = GetPawn();
-	if (MyPawn)
-	{
-		float const Distance = FVector::Dist(DestLocation, MyPawn->GetActorLocation());
-
-		// We need to issue move command only if far enough in order for walk animation to play correctly
-		if ((Distance > 120.0f))
-		{
-			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
-		}
-	}
-}
-
-void AIuniusPlayerController::OnSetDestinationPressed()
-{
-	// set flag to keep updating destination until released
-	bMoveToMouseCursor = true;
-}
-
-void AIuniusPlayerController::OnSetDestinationReleased()
-{
-	// clear flag to indicate we should stop updating the destination
-	bMoveToMouseCursor = false;
 }
 
 void AIuniusPlayerController::Dash()
 {
 	bWantToDash = true;
+}
+
+void AIuniusPlayerController::Attack()
+{
+	bWantToAttack = true;
 }

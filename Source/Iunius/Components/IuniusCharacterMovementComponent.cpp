@@ -31,6 +31,7 @@ void UIuniusCharacterMovementComponent::Dash(const FVector & DirectionToDash, fl
 		DashDuration = Duration;
 		DashTimer = Duration;
 		DashSpeed = Speed;
+		bPreviousOrientToMovement = bOrientRotationToMovement;
 		bOrientRotationToMovement = false;
 		OnDash.Broadcast(DirectionToDash);
 	}
@@ -42,6 +43,7 @@ void UIuniusCharacterMovementComponent::StopDash()
 	{
 		SetMovementMode(MOVE_Walking, (uint8)EMovementModeCustom::CUSTOM_None);
 		bOrientRotationToMovement = true;
+		bOrientRotationToMovement = bPreviousOrientToMovement;
 		OnStopDash.Broadcast();
 	}
 }

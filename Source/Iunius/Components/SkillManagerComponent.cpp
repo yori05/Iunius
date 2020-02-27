@@ -5,6 +5,7 @@
 #include "Skills/SkillBase.h"
 #include "IuniusCharacter.h"
 #include "Skills/Dash_Basic.h"
+#include "Skills/Attack_Basic.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
 
@@ -91,9 +92,6 @@ void USkillManagerComponent::DashRequested(const FVector & DirectionDash)
  			return;
  	}
  
-	//if (GEngine && GetWorld())
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("Emplacement Scene => ")) + GetWorld()->GetLocalURL());
-
  	auto SkillDash = Cast<UDash_Basic, USkillBase>(Skills[0]);
   
 	if (!SkillDash)
@@ -102,6 +100,35 @@ void USkillManagerComponent::DashRequested(const FVector & DirectionDash)
  	SkillDash->SetDirectionDash(DirectionDash);
  
  	if (SkillDash->RequestExecute())
+		onSkillRequested.Broadcast(1);
+	else
+		onSkillRequested.Broadcast(0);
+}
+
+void USkillManagerComponent::AttackRequested(const FVector& DirectionAttack)
+{
+	if (!Skills.IsValidIndex(1))
+		return;
+
+	Skills[1]->SetTarget(pOwnerCharacter);
+
+	if (!Skills[1]->CanBeExecuted())
+		return;
+
+	for (auto i : Skills)
+	{
+		if (i->IsLocked())
+			return;
+	}
+
+	auto SkillAttack = Cast<UAttack_Basic, USkillBase>(Skills[1]);
+
+	if (!SkillAttack)
+		return;
+
+	SkillAttack->SetDirectionAttack(DirectionAttack);
+
+	if (SkillAttack->RequestExecute())
 		onSkillRequested.Broadcast(1);
 	else
 		onSkillRequested.Broadcast(0);

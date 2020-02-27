@@ -35,7 +35,8 @@ void UDamagerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 EDamageResult UDamagerComponent::DealDamage(float Value, UHealthComponent * Target, uint8 AbosbableDamage)
 {
-	OnDealDamage.Broadcast(EDamageResult::DamageResult_None, Value, Target);
+	auto Result = Target->LooseHP(Value, ElementDamager, this);
+	OnDealDamage.Broadcast(Result, Value, Target);
 
-	return EDamageResult::DamageResult_None;
+	return Result;
 }

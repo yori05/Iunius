@@ -93,6 +93,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "MainData")
 		uint8 bIsLocker = 0; //Set if this skill lock other skill when he is executed;
 
+	UPROPERTY(EditAnywhere, Category = "MainData")
+		uint8 bIsForced = 0; //Set if this skill can be launch even if other skill lock the launch;
+
 protected:
 	UFUNCTION(BlueprintCallable)
 		virtual void BeforeSpawnActor();
@@ -130,6 +133,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		uint8 IsLocked() { return (bIsLocker) ? bIsExecuted : bIsLocker; }
+
+	UFUNCTION(BlueprintCallable)
+		uint8 IsForced() { return bIsForced; }
 
 	//What will be done when the Collider linked to this func will Begin Overlap
 	UFUNCTION(BlueprintCallable)

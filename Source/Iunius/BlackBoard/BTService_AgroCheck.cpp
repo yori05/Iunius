@@ -73,7 +73,7 @@ void UBTService_AgroCheck::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 				if (resultHit.bBlockingHit && resultHit.Actor == i)
 				{
 					OwnerComp.GetBlackboardComponent()->SetValueAsObject(TargetPointerKey.SelectedKeyName, i);
-					OwnerComp.GetBlackboardComponent()->SetValueAsVector(TargetLocationKey.SelectedKeyName, pawnLocation);
+					OwnerComp.GetBlackboardComponent()->SetValueAsVector(TargetLocationKey.SelectedKeyName, targetLocation);
 				}
 				else
 				{

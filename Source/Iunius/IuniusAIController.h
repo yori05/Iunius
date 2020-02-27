@@ -26,10 +26,10 @@ protected:
 	class UBlackboardComponent *CurrentBB;
 
 	UPROPERTY(EditAnywhere, Category = Blackboard)
-		struct FBlackboardKeySelector PawnPointerKey;
+		FName PawnPointerKey;
 
 	UPROPERTY(EditAnywhere, Category = Blackboard)
-		struct FBlackboardKeySelector PawnLocationKey;
+		FName PawnLocationKey;
 
 	virtual void BeginPlay()override;
 
