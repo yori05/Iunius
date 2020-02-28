@@ -58,80 +58,79 @@ uint8 USkillManagerComponent::IsASkillExecuting()
 	return 0;
 }
 
-void USkillManagerComponent::SkillRequested(const int32 SkillIndex)
+uint8 USkillManagerComponent::SkillRequested(const int32 SkillIndex)
 {
 	if (!Skills.IsValidIndex(SkillIndex))
-		return;
+		return false;
 
 	if (!Skills[SkillIndex]->CanBeExecuted())
-		return;
+		return false;
 
 	for (auto i : Skills)
 	{
 		if (i->IsLocked())
-			return;
+			return false;
 	}
 
-	Skills[SkillIndex]->RequestExecute();
+	auto temp = Skills[SkillIndex]->RequestExecute();
 	onSkillRequested.Broadcast(SkillIndex);
+	return temp;
 }
 
-void USkillManagerComponent::DashRequested(const FVector & DirectionDash)
+uint8 USkillManagerComponent::DashRequested(const FVector & DirectionDash)
 {
- 	if (!Skills.IsValidIndex(0))
- 		return;
- 
+	if (!Skills.IsValidIndex(0))
+		return false;
+
 	Skills[0]->SetTarget(pOwnerCharacter);
 
- 	if (!Skills[0]->CanBeExecuted())
- 		return;
- 
- 	for (auto i : Skills)
- 	{
- 		if (i->IsLocked())
- 			return;
- 	}
- 
- 	auto SkillDash = Cast<UDash_Basic, USkillBase>(Skills[0]);
-  
-	if (!SkillDash)
-		return;
+	if (!Skills[0]->CanBeExecuted())
+		return false;
 
- 	SkillDash->SetDirectionDash(DirectionDash);
- 
- 	if (SkillDash->RequestExecute())
-		onSkillRequested.Broadcast(1);
-	else
-		onSkillRequested.Broadcast(0);
+	for (auto i : Skills)
+	{
+		if (i->IsLocked())
+			return false;
+	}
+
+	auto SkillDash = Cast<UDash_Basic, USkillBase>(Skills[0]);
+
+	if (!SkillDash)
+		return false;
+
+	SkillDash->SetDirectionDash(DirectionDash);
+
+	auto temp = SkillDash->RequestExecute();
+	onSkillRequested.Broadcast(0);
+	return temp;
 }
 
-void USkillManagerComponent::AttackRequested(const FVector& DirectionAttack)
+uint8 USkillManagerComponent::AttackRequested(const FVector& DirectionAttack)
 {
 	if (!Skills.IsValidIndex(1))
-		return;
+		return false;
 
 	Skills[1]->SetTarget(pOwnerCharacter);
 
 	if (!Skills[1]->CanBeExecuted())
-		return;
+		return false;
 
 	for (auto i : Skills)
 	{
 		if (i->IsLocked())
-			return;
+			return false;
 	}
 
 	auto SkillAttack = Cast<UAttack_Basic, USkillBase>(Skills[1]);
 
 	if (!SkillAttack)
-		return;
+		return false;
 
 	SkillAttack->SetDirectionAttack(DirectionAttack);
 
-	if (SkillAttack->RequestExecute())
-		onSkillRequested.Broadcast(1);
-	else
-		onSkillRequested.Broadcast(0);
+	auto temp = SkillAttack->RequestExecute();
+	onSkillRequested.Broadcast(1);
+	return temp;
 }
 
 USkillBase* USkillManagerComponent::GetDashSkill()

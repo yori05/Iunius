@@ -10,19 +10,19 @@
 void UAttack_Healing::ResultOfDealDamage(EDamageResult DamageResult, AActor* OtherActor)
 {
 	Super::ResultOfDealDamage(DamageResult, OtherActor);
-	//if (DamageResult == EDamageResult::DamageResult_Deal)
-	//{
-	//	auto Healer = pActor->GetHealerComponent();
-	//	Healer->
-	//	pTarget->GetHealthComponent()
-	//}
-	//if (DamageResult == EDamageResult::DamageResult_Deal || DamageResult == EDamageResult::DamageResult_Kill || DamageResult == EDamageResult::DamageResult_Absorbed)
-	//{
-	//	auto Character = Cast<ACharacter>(OtherActor);
-	//	float Ratio = (DamageResult == EDamageResult::DamageResult_Absorbed) ? 0.5f : (DamageResult == EDamageResult::DamageResult_Kill) ? 2.0f : 1.0f;
-	//	if (Character)
-	//	{
-	//		Character->LaunchCharacter(DirectionAttack * PowEjection * Ratio, true, false);
-	//	}
-	//}
+
+	if (DamageResult == EDamageResult::DamageResult_Deal || DamageResult == EDamageResult::DamageResult_Deal)
+	{
+		auto Healer = pActor->GetHealerComponent();
+		auto result = Healer->GiveHeal(HealByHit * BoostHeal, pTarget->GetHealthComponent());
+
+		if (result == EHealResult::HealResult_Absorbed || result == EHealResult::HealResult_Deal || result == EHealResult::HealResult_Full)
+		{
+			OnHealSuccessFull.Broadcast(result, OtherActor, this);
+		}
+		else
+		{
+			OnHealBlocked.Broadcast(result, OtherActor, this);
+		}
+	}
 }

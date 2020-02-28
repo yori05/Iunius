@@ -19,6 +19,7 @@ ASkillActor::ASkillActor()
 	if (RootComponent && StaticMeshComponent)
 	{
 		StaticMeshComponent->SetupAttachment(RootComponent);
+		StaticMeshComponent->SetCollisionProfileName("NoCollision");
 	}
 }
 
@@ -29,7 +30,7 @@ void ASkillActor::BeginPlay()
 	
 	if (ColliderComponent)
 	{
-		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor::DetectionColliderBeginOverlap);
+		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor::FDetectionColliderBeginOverlap);
 		ColliderComponent->OnComponentEndOverlap.AddUniqueDynamic(this, &ASkillActor::DetectionColliderEndOverlap);
 	}
 }
@@ -51,7 +52,7 @@ bool ASkillActor::AttachRootToActor(USceneComponent * ComponentLinked)
 	return RootComponent->AttachToComponent(ComponentLinked, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
-void ASkillActor::DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ASkillActor::FDetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (pSkillOwner && FSkill_OnBeginOverlap)
 		FSkill_OnBeginOverlap(pSkillOwner, OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);

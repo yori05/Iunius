@@ -2,6 +2,16 @@
 
 #pragma once
 
+UENUM(BlueprintType)
+enum class EHealResult : uint8
+{
+	HealResult_None UMETA(DisplayName = "None"),
+	HealResult_Absorbed UMETA(DisplayName = "Absorbed"),
+	HealResult_Full UMETA(DisplayName = "Full"),
+	HealResult_Deal  UMETA(DisplayName = "Deal"),
+	HealResult_Impossible  UMETA(DisplayName = "Impossible"),
+	HealResult_Max  UMETA(Hidden),
+};
 
 UENUM(BlueprintType)
 enum class EDamageResult : uint8
@@ -15,7 +25,7 @@ enum class EDamageResult : uint8
 };
 
 UENUM(BlueprintType)
-enum class EDamageElement : uint8
+enum class ETypeElement : uint8
 {
 	DamageResult_None UMETA(DisplayName = "None"),
 	DamageResult_Neutral UMETA(DisplayName = "Neutral"),

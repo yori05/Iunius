@@ -3,37 +3,35 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Skills/Dash_GoThrough.h"
-#include "Dash_Projectile.generated.h"
+#include "Skills/SkillBase.h"
+#include "Shot_Direction.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class IUNIUS_API UDash_Projectile : public UDash_GoThrough
+class IUNIUS_API UShot_Direction : public USkillBase
 {
 	GENERATED_BODY()
 
-protected :
+protected:
 	UPROPERTY(BlueprintReadOnly, Category = "MainData")
-	ASkillActor* pActorProjectile = nullptr;
+		TArray<ASkillActor*> pActors;
 
-	UPROPERTY(EditAnywhere, Category = "Projectile")
-	TSubclassOf<class ASkillActor> TypeOfSkillProjectileActor = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Attack")
+		uint8 ShotEject = 8;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+		float DurationAttack = 1.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 		float SpeedProjectile = 2000.f;
 
-	UPROPERTY(EditAnywhere, Category = "Projectile")
-		float TimeLifeProjectile = 3.f;
-
-public :
-	virtual void HalfWaySpawnActor() override;
-
+protected:
+	virtual void Execute() override;
+	virtual void EndExecute() override;
 	virtual void AfterSpawnActor() override;
-
 	virtual void FDetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-
 	virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
 };

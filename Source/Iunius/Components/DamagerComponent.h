@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "DamageEnums.h"
+#include "IuniusEnums.h"
 #include "DamagerComponent.generated.h"
 
 class UHealthComponent;
@@ -26,7 +26,7 @@ public:
 
 public:	
 	UPROPERTY(EditAnywhere)
-	EDamageElement ElementDamager = EDamageElement::DamageResult_None;
+	ETypeElement ElementDamager = ETypeElement::DamageResult_None;
 
 protected:
 	// Called when the game starts

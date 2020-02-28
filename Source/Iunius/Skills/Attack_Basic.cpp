@@ -13,7 +13,7 @@ void UAttack_Basic::HalfWaySpawnActor()
 {
 	Super::HalfWaySpawnActor();
 
-	pActor->FSkill_OnBeginOverlap = &USkillBase::FDetectiocColliderBeginOverlap_Static;
+	pActor->FSkill_OnBeginOverlap = &USkillBase::execFDetectiocColliderBeginOverlap;
 	pActor->FSkill_OnEndOverlap = &USkillBase::FDetectiocColliderEndOverlap_Static;
 }
 
@@ -34,7 +34,7 @@ void UAttack_Basic::EndExecute()
 	pTarget->ChangeCanRotate(true);
 }
 
-void UAttack_Basic::DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void UAttack_Basic::FDetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor && OtherActor != pTarget)
 	{
@@ -42,7 +42,7 @@ void UAttack_Basic::DetectionColliderBeginOverlap(UPrimitiveComponent* Overlappe
 
 		if (Component)
 		{
-			Super::DetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+			Super::FDetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
 			if (pActor)
 			{
@@ -52,8 +52,6 @@ void UAttack_Basic::DetectionColliderBeginOverlap(UPrimitiveComponent* Overlappe
 				{
 					auto Result = Damager->DealDamage(DamageValue, Component);
 					ResultOfDealDamage(Result, OtherActor);
-
-					
 				}
 			}
 		}
@@ -65,11 +63,17 @@ void UAttack_Basic::ResultOfDealDamage(EDamageResult DamageResult, AActor* Other
 	if (DamageResult == EDamageResult::DamageResult_Deal || DamageResult == EDamageResult::DamageResult_Kill || DamageResult == EDamageResult::DamageResult_Absorbed)
 	{
 		auto Character = Cast<ACharacter>(OtherActor);
-		float Ratio = (DamageResult == EDamageResult::DamageResult_Absorbed) ? 0.5f : (DamageResult == EDamageResult::DamageResult_Kill) ? 2.0f : 1.0f;
+		float Ratio = (DamageResult == EDamageResult::DamageResult_Absorbed) ? BoostEjectionAbsobed : (DamageResult == EDamageResult::DamageResult_Kill) ? BoostEjectionHit : BoostEjectionKill;
+
 		if (Character)
 		{
 			Character->LaunchCharacter(DirectionAttack * PowEjection * Ratio, true, false);
+			OnAttackSuccessfull.Broadcast(DamageResult, OtherActor, this);
 		}
+	}
+	else
+	{
+		OnAttackBlocked.Broadcast(DamageResult, OtherActor, this);
 	}
 }
 

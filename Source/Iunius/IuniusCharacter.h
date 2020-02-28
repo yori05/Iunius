@@ -25,13 +25,13 @@ public:
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
 
 	UFUNCTION(BlueprintCallable)
-		void UseSkill(int32 SkillIndex);
+	uint8 UseSkill(int32 SkillIndex);
 
 	UFUNCTION(BlueprintCallable)
-	void SkillDash(const FVector & DirectionToDash);
+	uint8 SkillDash(const FVector & DirectionToDash);
 
 	UFUNCTION(BlueprintCallable)
-	void SkillAttack(const FVector& DirectionToAttack);
+	uint8 SkillAttack(const FVector& DirectionToAttack);
 
 	UFUNCTION(BlueprintCallable)
 	void MovementDash(const FVector& DirectionToDash, float Duration = 0.25f, float Speed = 2500.0f);

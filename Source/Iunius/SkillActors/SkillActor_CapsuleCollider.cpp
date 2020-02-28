@@ -12,7 +12,7 @@ ASkillActor_CapsuleCollider::ASkillActor_CapsuleCollider()
 	if (ColliderComponent && RootComponent)
 	{
 		ColliderComponent->SetupAttachment(RootComponent);
-		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor_CapsuleCollider::DetectionColliderBeginOverlap);
+		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor_CapsuleCollider::FDetectionColliderBeginOverlap);
 		ColliderComponent->OnComponentEndOverlap.AddUniqueDynamic(this, &ASkillActor_CapsuleCollider::DetectionColliderEndOverlap);
 
 		if (StaticMeshComponent)

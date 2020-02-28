@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Engine/EngineTypes.h"
 #include "Components/PrimitiveComponent.h"
-#include "DamageEnums.h"
+#include "IuniusEnums.h"
 #include "SkillBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSkillDelegate);
@@ -79,7 +79,7 @@ protected:
 		float DamageValue = 0.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Damage")
-		EDamageElement DamageElement = EDamageElement::DamageResult_None;
+		ETypeElement DamageElement = ETypeElement::DamageResult_None;
 
 	UPROPERTY(BlueprintReadOnly, Category = "MainData")
 		uint8 bIsExecuted = 0;
@@ -139,17 +139,17 @@ public:
 
 	//What will be done when the Collider linked to this func will Begin Overlap
 	UFUNCTION(BlueprintCallable)
-		virtual void DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		virtual void FDetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	//What will be done when the Collider linked to this func will End Overlap
 	UFUNCTION(BlueprintCallable)
 		virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	//Used to launch DetectionColliderBeginOverlap easly from a funcPointer
-	static void FDetectiocColliderBeginOverlap_Static(USkillBase* SkillLauncher, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+	//Used to launch FDetectionColliderBeginOverlap easly from a funcPointer
+	static void execFDetectiocColliderBeginOverlap(USkillBase* SkillLauncher, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 	{
 		if (SkillLauncher)
-			SkillLauncher->DetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+			SkillLauncher->FDetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 	}
 
 	//Used to launch DetectionColliderEndOverlap easly from a funcPointer

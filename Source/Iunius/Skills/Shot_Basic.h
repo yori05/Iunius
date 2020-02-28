@@ -3,24 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Skills/Dash_GoThrough.h"
-#include "Dash_Overlap.generated.h"
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FDetectionOverlap, UPrimitiveComponent*, OverlappedComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, int32, OtherBodyIndex, bool, bFromSweep, const FHitResult &, SweepResult);
+#include "Skills/SkillBase.h"
+#include "Shot_Basic.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class IUNIUS_API UDash_Overlap : public UDash_GoThrough
+class IUNIUS_API UShot_Basic : public USkillBase
 {
 	GENERATED_BODY()
-	
-protected :
 
+protected:
 	virtual void HalfWaySpawnActor() override;
-
 	virtual void FDetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-
 	virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
+
 };

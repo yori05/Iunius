@@ -105,20 +105,23 @@ void AIuniusCharacter::Tick(float DeltaSeconds)
 	}
 }
 
-void AIuniusCharacter::UseSkill(int32 SkillIndex)
+uint8 AIuniusCharacter::UseSkill(int32 SkillIndex)
 {
 	if (SkillManagerComponent)
 	{
-		SkillManagerComponent->SkillRequested(SkillIndex);
+		return SkillManagerComponent->SkillRequested(SkillIndex);
 	}
+
+	return false;
 }
 
-void AIuniusCharacter::SkillDash(const FVector & DirectionToDash)
+uint8 AIuniusCharacter::SkillDash(const FVector & DirectionToDash)
 {
 	if (SkillManagerComponent)
 	{
-		SkillManagerComponent->DashRequested(DirectionToDash);
+		return SkillManagerComponent->DashRequested(DirectionToDash);
 	}
+	return false;
 }
 
 void AIuniusCharacter::MovementDash(const FVector& DirectionToDash, float Duration, float Speed)
@@ -130,12 +133,13 @@ void AIuniusCharacter::MovementDash(const FVector& DirectionToDash, float Durati
 	}
 }
 
-void AIuniusCharacter::SkillAttack(const FVector& DirectionToAttack)
+uint8 AIuniusCharacter::SkillAttack(const FVector& DirectionToAttack)
 {
 	if (SkillManagerComponent)
 	{
-		SkillManagerComponent->AttackRequested(DirectionToAttack);
+		return SkillManagerComponent->AttackRequested(DirectionToAttack);
 	}
+	return false;
 }
 
 uint8 AIuniusCharacter::CanMovementDash()

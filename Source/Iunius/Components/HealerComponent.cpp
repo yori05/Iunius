@@ -2,6 +2,7 @@
 
 
 #include "HealerComponent.h"
+#include "Components/HealthComponent.h"
 
 // Sets default values for this component's properties
 UHealerComponent::UHealerComponent()
@@ -32,3 +33,11 @@ void UHealerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
+EHealResult UHealerComponent::GiveHeal(float Value, UHealthComponent * Target, uint8 AbosbableHeal)
+{
+	auto Result = Target->GainHP(Value, ElementHeal, this);
+	OnGiveHeal.Broadcast(Result, Value, Target);
+
+	return Result;
+
+}

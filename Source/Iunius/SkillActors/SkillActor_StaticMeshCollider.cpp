@@ -12,7 +12,7 @@ ASkillActor_StaticMeshCollider::ASkillActor_StaticMeshCollider()
 	if (ColliderComponent && RootComponent)
 	{
 		ColliderComponent->SetupAttachment(RootComponent);
-		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor_StaticMeshCollider::DetectionColliderBeginOverlap);
+		ColliderComponent->OnComponentBeginOverlap.AddUniqueDynamic(this, &ASkillActor_StaticMeshCollider::FDetectionColliderBeginOverlap);
 		ColliderComponent->OnComponentEndOverlap.AddUniqueDynamic(this, &ASkillActor_StaticMeshCollider::DetectionColliderEndOverlap);
 
 		if (StaticMeshComponent)

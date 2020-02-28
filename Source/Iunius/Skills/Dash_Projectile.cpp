@@ -32,9 +32,8 @@ void UDash_Projectile::HalfWaySpawnActor()
 				Damager->ElementDamager = DamageElement;
 			}
 
-			pActorProjectile->FSkill_OnBeginOverlap = &USkillBase::FDetectiocColliderBeginOverlap_Static;
+			pActorProjectile->FSkill_OnBeginOverlap = &USkillBase::execFDetectiocColliderBeginOverlap;
 			pActorProjectile->FSkill_OnEndOverlap = &USkillBase::FDetectiocColliderEndOverlap_Static;
-
 
 			auto ProjectileMC = pActorProjectile->GetProjectileMovementComponent();
 
@@ -43,8 +42,6 @@ void UDash_Projectile::HalfWaySpawnActor()
 				auto vel = pActorProjectile->GetActorForwardVector();
 				ProjectileMC->Velocity = DirectionDash * SpeedProjectile;
 			}
-
-			auto vel = ProjectileMC->Velocity;
 
 			FTimerHandle ExecuteTimerHandle;
 			pActorProjectile->GetWorldTimerManager().SetTimer(ExecuteTimerHandle, pActorProjectile, &ASkillActor::DestroySkillActor, TimeLifeProjectile);
@@ -62,7 +59,7 @@ void UDash_Projectile::AfterSpawnActor()
 	Super::AfterSpawnActor();
 	pActorProjectile = nullptr;
 }
-void UDash_Projectile::DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void UDash_Projectile::FDetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor && OtherActor != pTarget)
 	{
@@ -70,7 +67,7 @@ void UDash_Projectile::DetectionColliderBeginOverlap(UPrimitiveComponent* Overla
 
 		if (Component)
 		{
-			Super::DetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+			Super::FDetectionColliderBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
 			if (pActorProjectile)
 			{

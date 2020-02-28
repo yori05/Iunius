@@ -44,13 +44,13 @@ public:
 
 	//Call the delegate just in case the skill is launched
 	UFUNCTION(BlueprintCallable)
-		void SkillRequested(const int32 SkillIndex);
+		uint8 SkillRequested(const int32 SkillIndex);
 
 	UFUNCTION(BlueprintCallable)
-		void DashRequested(const FVector & DirectionDash);
+		uint8 DashRequested(const FVector & DirectionDash);
 
 	UFUNCTION(BlueprintCallable)
-		void AttackRequested(const FVector& DirectionAttack);
+		uint8 AttackRequested(const FVector& DirectionAttack);
 
 	UFUNCTION(BlueprintCallable)
 	USkillBase* GetDashSkill();

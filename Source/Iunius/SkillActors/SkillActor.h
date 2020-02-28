@@ -12,6 +12,7 @@ class USceneComponent;
 class UDamagerComponent;
 class UProjectileMovementComponent;
 class UHealerComponent;
+class UInterpToMovementComponent;
 
 UCLASS()
 class IUNIUS_API ASkillActor : public AActor
@@ -56,6 +57,9 @@ protected :
 	UPROPERTY(EditAnywhere)
 	UHealerComponent* HealerComponent = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	UInterpToMovementComponent* InterpTMComponent = nullptr;
+
 public:	//Membre
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -70,7 +74,7 @@ public:	//Membre
 	bool AttachRootToActor(USceneComponent* ComponentLinked);
 
 	UFUNCTION(BlueprintCallable)
-		virtual void DetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		virtual void FDetectionColliderBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION(BlueprintCallable)
 		virtual void DetectionColliderEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
@@ -92,4 +96,8 @@ public : //Accesseur
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UProjectileMovementComponent* GetProjectileMovementComponent() { return ProjectileMovementComponent; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE UInterpToMovementComponent* GetInterpToMovementComponent() { return InterpTMComponent; }
+	
 };

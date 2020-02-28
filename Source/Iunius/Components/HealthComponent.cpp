@@ -35,7 +35,7 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-EDamageResult UHealthComponent::LooseHP(float Value, EDamageElement Element, UDamagerComponent* DamagerComponent, uint8 bAbsorbable)
+EDamageResult UHealthComponent::LooseHP(float Value, ETypeElement Element, UDamagerComponent* DamagerComponent, uint8 bAbsorbable)
 {
 	if (bIsImune)
 	{
@@ -66,31 +66,31 @@ EDamageResult UHealthComponent::LooseHP(float Value, EDamageElement Element, UDa
 	return EDamageResult::DamageResult_Deal;
 }
 
-EDamageResult UHealthComponent::GainHP(float Value, EDamageElement Element, UHealerComponent* HealerComponent, uint8 bAbsorbable)
+EHealResult UHealthComponent::GainHP(float Value, ETypeElement Element, UHealerComponent* HealerComponent, uint8 bAbsorbable)
 {
-	if (bCanBeHeal)
+	if (!bCanBeHeal)
 	{
-		OnReceiveHeal.Broadcast(EDamageResult::DamageResult_Imune, Value, Element, HealerComponent);
-		return EDamageResult::DamageResult_Imune;
+		OnReceiveHeal.Broadcast(EHealResult::HealResult_Impossible, Value, Element, HealerComponent);
+		return EHealResult::HealResult_Impossible;
 	}
 	if (Value == 0.0f)
 	{
-		OnReceiveHeal.Broadcast(EDamageResult::DamageResult_None, Value, Element, HealerComponent);
-		return EDamageResult::DamageResult_None;
+		OnReceiveHeal.Broadcast(EHealResult::HealResult_None, Value, Element, HealerComponent);
+		return EHealResult::HealResult_None;
 	}
 
 	HealthPoint += Value;
 	if (HealthPoint > HealthPointMax)
 		HealthPoint = HealthPointMax;
 
-	if (HealthPoint >= HealthPointMax)
+	if (HealthPoint > HealthPointMax)
 	{
 		OnFullLife.Broadcast();
-		OnReceiveHeal.Broadcast(EDamageResult::DamageResult_Kill, Value, Element, HealerComponent);
-		return EDamageResult::DamageResult_Kill;
+		OnReceiveHeal.Broadcast(EHealResult::HealResult_Full, Value, Element, HealerComponent);
+		return EHealResult::HealResult_Full;
 	}
 
-	OnReceiveHeal.Broadcast(EDamageResult::DamageResult_Deal, Value, Element, HealerComponent);
-	return EDamageResult::DamageResult_Deal;
+	OnReceiveHeal.Broadcast(EHealResult::HealResult_Deal, Value, Element, HealerComponent);
+	return EHealResult::HealResult_Deal;
 
 }

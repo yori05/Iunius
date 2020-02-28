@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "DamageEnums.h"
+#include "IuniusEnums.h"
 #include "HealthComponent.generated.h"
 
 class UDamagerComponent;
 class UHealerComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthReceiveDamageDelegate, EDamageResult, DamageResult, float, Value, EDamageElement, DamageElement, UDamagerComponent*, DamagerComponent);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthReceiveHealDelegate, EDamageResult, DamageResult, float, Value, EDamageElement, DamageElement, UHealerComponent*, DamagerComponent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthReceiveDamageDelegate, EDamageResult, DamageResult, float, Value, ETypeElement, DamageElement, UDamagerComponent*, DamagerComponent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthReceiveHealDelegate, EHealResult, HealResult, float, Value, ETypeElement, DamageElement, UHealerComponent*, DamagerComponent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FHPChangeDelegate, float, HealthPoint, float, HealthPointMax);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHealthComponentEventDelegate);
 
@@ -64,10 +64,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual EDamageResult LooseHP(float Value, EDamageElement Element, UDamagerComponent* DamagerComponent = nullptr, uint8 bAbsorbable = 1);
+	virtual EDamageResult LooseHP(float Value, ETypeElement Element, UDamagerComponent* DamagerComponent = nullptr, uint8 bAbsorbable = 1);
 
 	UFUNCTION(BlueprintCallable)
-		virtual EDamageResult GainHP(float Value, EDamageElement Element, UHealerComponent* HealerComponent = nullptr, uint8 bAbsorbable = 1);
+		virtual EHealResult GainHP(float Value, ETypeElement Element, UHealerComponent* HealerComponent = nullptr, uint8 bAbsorbable = 1);
 
 	UFUNCTION(BlueprintCallable)
 		uint8 IsImune() { return bIsImune; }
